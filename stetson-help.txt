@@ -1,0 +1,176 @@
+Welcome to STETSON!
+
+Stetson is a tool for extract STARR data in In-house data format or OMOP data format and deliver it to secure Nero ecosystem provided by Stanford.
+
+To get started, you first need to create a new patient list. There are two ways to open the "lists" screen; one is to click the "Patient / ID Lists" link in the "Quick Links" section of the Dashboard. The other is to navigate to "Lists" in the navbar across the top of the page. Once there, click the "Create New List" button on that page.
+
+An identifier list consists of a list of patients, an associated compliance document such as an IRB number, and a list of collaborators to share with. If you already use STARR Tools, it should be famillar to you as some of the information entered when saving a cohort search for chart review.
+
+Unlike STARR Tools, however, STETSON allows you to separately manage your patient lists and the associated clinical data, which STETSON refers to as an Extract.
+
+Step 1 - Compliance
+The first question you are asked when creating a new identifier list is about Privacy. In order to use STETSON you must either have a valid IRB with associated STARR Data Privacy Attestation (DPA), or a self-signed DPA.
+
+If you want access to PHI for research purposes, you must not only have a valid IRB with associated DPA, you must also have a PHI download policy exemption by filling up survey at https://redcap.stanford.edu/webauth/surveys/?s=RKFR9PWAP9R3X493 . For more information on privacy compliance at Stanford, consult the data compliance section https://med.stanford.edu/starr-tools/data-compliance.html of the STARR Tools site.
+
+Your available compliance documents are listed in the dropdown. Select the appropriate one before continuing. If you don't see an IRB or DPA you were expecting, the full list of all compliance documentation recognized by STARR is available in the "Compliance" page ( https://starr-tools-dev.med.stanford.edu/stetson/compliance) linked on the Dashboard, along with helpful links to the STARR Tools compliance process.
+
+Step 2 - Named Patient List
+
+After giving your list a short descriptive name, and optionally adding a detailed description, you get to specify the list of patients for which you want to obtain clinical data.
+
+There are a variety of options available to specify sets of patients, including uploading MRNs, uploading DICOM file accession numbers, referencing a cohort of patients saved for Chart Review in STARR Tools, and referencing a patient list previously defined in STETSON.
+
+If this is your first time creating a patient list, you will see there are no available options if you select STETSON, but once you save your first list, it will become available for use in defining subsequent lists.
+
+Once you have selected the source type, you will be prompted to complete the definition in a manner appropriate to the selected source type. If you choose to upload MRNs or DICOM file accession numbers, you are shown a button:  click on the button and follow the instructions to upload your identifiers.  If you instead chose either Cohort Discovery Tool or STETSON, you are given a dropdown list of previously defined cohorts or named lists. Select one from the dropdown before continuing.
+
+Optional Step: Multiple Sources for a Patient List
+You can of course just stop at one, but if you choose to add a second source of patients to your definition, you must specify how the two lists will be combined. You have three options: union, intersect, and minus.
+
+Union creates a de-duplicated cohort that includes all patients referenced in all specified sources. Note that if multiple sources reference the same patient, the final cohort will be slightly smaller than the sum of the size of the original, due to the de-duplication step.
+
+Intersect creates a cohort consisting only of patients referenced in all the specified sources.
+
+Minus takes the first source as a starting point, then removes patients specified by all subsequent sources.  This effectively lets you edit an existing cohort, removing unwanted entries.
+
+Next step: Define an Extract
+
+You now have the option of also configuring an initial data extract associated with the list you have defined, described on the next page. Or you can simply save your new list for later use.
+
+Tutorial Part 2: Defining Extracts
+
+Step 1: Choose or Define Patient List
+
+If you arrived at the extract definition page by clicking the "New Extract" button you will see a dropdown list of all saved patient lists. Your first step is to select the list you want to use for row-filtering the clinical data from the dropdown.
+
+If instead you are in process of defining a new list and have checked the "Yes, I want to define an associated data extract at this time" checkbox, your list definition will be saved and then used for row-filtering of the extract.
+
+Step 2: Specify PHI
+Next you are prompted to specify which PHI you will be working with. We ask that you specify the minimum necessary for your current research needs, in accordance with HIPAA Minimum Necessary.
+
+Please note that in June 2023, Stanford Medicine adopted a policy of prohibiting self-service download of PHI. In order to use Stetson to download PHI, in definition to all your other compliance documentation requirements you must also obtain an exemption to this policy (https://redcap.stanford.edu/webauth/surveys/?s=RKFR9PWAP9R3X493) .
+
+If the include PHI is disabled or strikethrough text, that means the IRB/DPA does not allow PHI to be used for research. There is one special case which makes PHI disabled is when the download exemption permission is not granted and you are trying to get data downloaded into CSV format.
+In this case, please file download exemption at https://redcap.stanford.edu/webauth/surveys/?s=RKFR9PWAP9R3X493
+
+You may observe some of the available PHI options are disabled, as denoted by the use of strikethrough font. In the example on the left, "Other PHI" is not available as an option, which means you will not be able to view Accession Numbers or any other identifiers that fall into the "Other" category in HIPAA. This means that the DPA associated with your IRB does not have the "Other PHI" box checked.
+
+If you want to enable a disabled option, you must modify your IRB, as described in this STARR Tools compliance walkthrough. (https://med.stanford.edu/starr-tools/data-compliance/modify-existing-protocol.html)
+
+If you choose to not work with real dates, you are given the choice of how to scrub dates from the data.
+
+Dates can either be sytematically shifted from their original value, or replaced by the patient age at event along with the year the event took place.
+
+When date shifting is selected as the scrubbing technique for dates, all dates for a given patient are shifted by the same amount, in order to preserve the exact timeline for that patient. Different shift values are used for different patients.
+
+When "age at event" is selected, the date of service or encounter is converted into patient age in years, represented as a floating point number with sufficient precision to pin down to the minute when the event occurred in the patient timeline.
+
+Further information on the techniques used to scrub PHI from free text is available on https://med.stanford.edu/starr-tools/self-service-chart-review/phi-scrubbing.html page of the STARR Tools site and in the white paper at https://docs.google.com/document/d/1ZFAqubETuXpCmizglb5PJAKTRJuJCOKpshwRw8Vc9CE/.
+
+Step 3: Opt in for SSA Death Data
+
+STARR contains death data obtained from the Social Security Administration (SSA), but that data cannot be disclosed to outside collaborators. If you plan on disclosing any of the data obtained with STETSON outside of Stanford, we encourage you to leave the SSA Death Data box unchecked.
+
+STARR contains dates of death recorded at both hospitals, which can be disclosed to collaborators once suitable legal agreements are in place. However if the patient died after leaving Stanford, it can be challenging to determine their current vital status, even with the SSA death data, which is less complete than you might think.
+
+You cannot assume your patients are still living if neither Stanford nor SSA has a record of their death.
+
+Step 4: Select a Data Model
+
+Your next decision will be which data model to use. This topic is discussed in depth at https://med.stanford.edu/stetson/datamodel.html.
+
+When in doubt, we recommend OMOP.
+
+If you have selected OMOP as your data model, you will receive all available clinical data for your chosen cohort of patients.
+
+If instead you have selected STRIDE as your data model, you are given the option of specifying which types of clinical data you want to obtain. The categories are the same as offered by data export in the STARR Tools Chart Review Tool.
+
+Step 6: Delivery Destination
+
+You now have the option of delivering to your computer, as a gzipped .tar file, or to Nero, to a BigQuery dataset.
+
+In order to use Nero you have to do some preliminary setup as described in https://med.stanford.edu/stetson/nero.html.
+
+Optional Step: Limit by Date Range
+
+The next option is to set a date range on the clinical elements of the extract. If you leave both fields blank, all available data will be included. If you specify a start date, only records occurring after the start date will be included. If you specify an end date, only records occurring before the given end date will be included.
+
+
+Step 7: Save and Run
+You can now save and run your data extract.
+
+You will be emailed at your-sunet-id@stanford.edu when the extraction process completes, as it can take a while, particularly for large patient lists.
+
+Tutorial Part 3: Monitoring Running Extracts
+When you click the "Save & Run" button, you are taken to the page listing all available extracts. This page will show you the status of your newly created job, which initially will be listed as "Not yet started".
+
+Once the extract is running, the icon will change, and the status message will say "In progress". You can see how many tasks have been started, how many are still waiting to start (queued), and how many minutes have elapsed since the request was issued.
+
+When the process is done, the icon will change to a check mark and the status message will summarize the elapsed time of the job as well as the overall elapsed time, which includes time the job spent waiting to start.
+
+If you specified CSV as your delivery mode, you will now see a new icon in the "Actions" column. Click on this icon to trigger the data download.
+
+Data is delivered to desktops as a gzipped .tar file. To extract, simply double click on the file in your File Explorer or Finder. The files will automatically unpack themselves into a new directory in the usual file download area on your computer.
+
+If you specified Nero as your delivery mode, once the status is marked as complete you should see the data once you log into the Nero project and navigate to the BigQuery dataset specified in the associated delivery configuration.
+
+Configuring data delivery to Nero is described in greater detail on https://med.stanford.edu/stetson/nero.html page.
+
+Tutorial Part 4: Managing Extracts and Lists
+
+Managing Extracts
+Once an extract has been created, in addition to downloading data if you specified CSV delivery you also have the option of re-running it, deleting it, or editing it.
+
+Click on the "Change settings, then re-run" button.
+
+Next you are prompted to specify which PHI you will be working with. We ask that you specify the minimum necessary for your current research needs, in accordance with HIPAA Minimum Necessary.
+
+You may observe some of the available PHI options are disabled, as denoted by the use of strikethrough font. In the example on the left, "Other PHI" is not available as an option, which means you will not be able to view Accession Numbers or any other identifiers that fall into the "Other" category in HIPAA. This means that the DPA associated with your IRB does not have the "Other PHI" box checked.
+
+If you want to enable a disabled option, you must modify your IRB, as described in this STARR Tools compliance walkthrough.\
+
+This takes you to a screen from which you can edit just the settings relevant to the data extraction process, namely, the data model, the data delivery venue, and filters if any on the clinical data being retrieved.
+
+All other settings, namely, the associated compliance documentation, the patient list definition, and the PHI settings, are associated with the patient list, which is saved separately from the export settings.
+
+Recall that when creating a list for the first time, as a convenience you are offered the option of configuring both the patient list AND an associated extract at the same time. Once created, however, the system allows you to manage extracts and lists independently.
+
+
+Managing Lists
+
+Lists can be viewed either as cards or as line items in a one-column table; to switch between these two views click on the control in the upper left.
+
+In each card, the list name and description appear across the top.  The number of associated patients is displayed in parentheses next to the name.
+
+Underneath the name and description you will see a summary of the selected data sources and how they were combined. In the simple example shown on the right, a single source, from STARR Tools (denoted by the gold star) , was specified. The simple green circle represents the fact that all patients from the specified source were used in creating the patient list associated with the patient list.
+
+Below the cohort specification summary you will see a summary of the associated IRB or DPA, and the list of collaborators, if any. If you have not specified anyone other than yourself, you will see the label 'Private'.
+
+Along the bottom (or on the far right, if you switch to list view by clicking on the icon in the upper right of the panel) you will see a set of active button. Hover over each one to see the associated tooltip.  From this button bar you can edit your patient list definition, export data, or delete the list.
+
+To get back to the export definition screen you were just on, click the "Download/deliver data" button (circled in red) from the associated list.
+
+To continue this tutorial, click the "Edit patient list" button. This will take you to the list configuration page.
+
+This page is virtually identical to the "Create list" page described in detail at the beginning of this tutorial. From here you can review the definition used to create your identifier list or make changes.
+
+Note that if you change the definition of a named list, this has no effect on prior extracts. In order to get data associated with a modified identifier list, you have to request a new data extract.
+
+Congratulations
+And that's it! Well, not quite; there are other links to explore. Go back to the dashboard and start clicking around!
+
+We hope you find STETSON a useful tool and research accelerator. Please send any questions, feedback or comments to starr-tools@lists.stanford.edu.
+
+
+At this time Care Everywhere data is only available in Epic.  When it comes to Care Everywhere data in the STARR Tools, the answer is generally “it’s complicated.” Different types of outside data behave differently, and the behaviors have also changed over time.  Some outside notes will appear, if they were received after a certain date (but I’m not sure what that date is, sorry!)  This is also true for some lab results.  Some categories of information will only appear if they have been reviewed and accepted by a clinician.  Some categories never appear at all in our data. Our group has no real control over this, though.  We try to deliver all the data that’s available to us.
+
+For planning purpose, it is safe to assume that it will take multiple weeks to get PHI download approval obtained/processed if everything is in order.
+
+If you have any questions on OMOP, contact OMOP office hours https://starr.stanford.edu/research-support
+
+If you do not see IRB or DPA, that means
+	1.	IRB is invalid/expired
+	2.	You do not have DPA attached to that IRB
+Please look at 	https://starr-tools-dev.med.stanford.edu/stetson/compliance for detailed list of available compliance protocols for you.
+
